@@ -115,7 +115,7 @@ export default function DashboardPage() {
                   <XAxis dataKey="label" tick={{ fontSize: 12, fill: '#464555' }} />
                   <YAxis domain={[0, 5]} tick={{ fontSize: 12, fill: '#464555' }} />
                   <Tooltip
-                    formatter={(v: number) => v.toFixed(2)}
+                    formatter={(v) => typeof v === 'number' ? v.toFixed(2) : ''}
                     contentStyle={{ background: '#fff', border: '1px solid #c7c4d8', borderRadius: 8 }}
                   />
                   <Line type="monotone" dataKey="gpa" stroke="#3525cd" strokeWidth={2.5} dot={{ fill: '#3525cd', r: 4 }} />
