@@ -7,15 +7,15 @@ import Sidebar from '@/components/layout/Sidebar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated, setUser } = useAuthStore();
+  const { isAuthenticated, setUser, _hasHydrated } = useAuthStore();
 
   useEffect(() => {
+    if (!_hasHydrated) return;
     if (!isAuthenticated) { router.replace('/login'); return; }
-    // Refresh user with full school/department data from the server
     authService.me().then(setUser).catch(() => {});
-  }, [isAuthenticated, router, setUser]);
+  }, [_hasHydrated, isAuthenticated, router, setUser]);
 
-  if (!isAuthenticated) return null;
+  if (!_hasHydrated) return null;
 
   return (
     <div className="flex min-h-screen bg-background">
