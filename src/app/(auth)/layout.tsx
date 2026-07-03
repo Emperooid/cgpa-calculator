@@ -1,4 +1,8 @@
+'use client';
+import { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/auth.store';
 
 const FEATURES = [
   { icon: 'calculate', title: 'GPA & CGPA Calculator', desc: 'Instant calculation with the Nigerian 5-point scale' },
@@ -8,12 +12,23 @@ const FEATURES = [
 ];
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const { isAuthenticated, _hasHydrated } = useAuthStore();
+
+  useEffect(() => {
+    if (_hasHydrated && isAuthenticated) {
+      router.replace('/dashboard');
+    }
+  }, [_hasHydrated, isAuthenticated, router]);
+
+  // Don't flash the auth form to an authenticated user
+  if (!_hasHydrated || isAuthenticated) return null;
+
   return (
     <div className="min-h-screen flex bg-background">
 
       {/* ── Left panel ── */}
       <div className="hidden lg:flex lg:w-[480px] xl:w-[520px] bg-primary flex-col justify-between p-12 text-on-primary relative overflow-hidden shrink-0">
-        {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-linear-to-br from-primary via-primary to-surface-tint opacity-90 pointer-events-none" />
 
         <div className="relative z-10">
