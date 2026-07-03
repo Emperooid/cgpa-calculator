@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import { authService } from '@/services/auth.service';
@@ -7,15 +7,18 @@ import Sidebar from '@/components/layout/Sidebar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated, setUser, _hasHydrated } = useAuthStore();
+  const { isAuthenticated, setUser } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (!_hasHydrated) return;
+    if (!mounted) return;
     if (!isAuthenticated) { router.replace('/login'); return; }
     authService.me().then(setUser).catch(() => {});
-  }, [_hasHydrated, isAuthenticated, router, setUser]);
+  }, [mounted, isAuthenticated, router, setUser]);
 
-  if (!_hasHydrated) return null;
+  if (!mounted) return null;
 
   return (
     <div className="flex min-h-screen bg-background">

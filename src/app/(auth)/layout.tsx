@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
@@ -13,16 +13,18 @@ const FEATURES = [
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated, _hasHydrated } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (_hasHydrated && isAuthenticated) {
+    if (mounted && isAuthenticated) {
       router.replace('/dashboard');
     }
-  }, [_hasHydrated, isAuthenticated, router]);
+  }, [mounted, isAuthenticated, router]);
 
-  // Don't flash the auth form to an authenticated user
-  if (!_hasHydrated || isAuthenticated) return null;
+  if (!mounted || isAuthenticated) return null;
 
   return (
     <div className="min-h-screen flex bg-background">
