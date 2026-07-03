@@ -14,7 +14,12 @@ const NAV = [
   { href: '/contribute', label: 'Contribute', icon: 'volunteer_activism' },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+}
+
+function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuthStore();
@@ -30,7 +35,7 @@ export default function Sidebar() {
   const initial = name[0]?.toUpperCase() ?? 'S';
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-surface-container-low border-r border-outline-variant flex flex-col z-50 hidden md:flex">
+    <div className="h-full w-64 bg-surface-container-low border-r border-outline-variant flex flex-col">
       {/* Logo */}
       <div className="p-6 flex items-center gap-3 border-b border-outline-variant">
         <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-lg">
@@ -50,6 +55,7 @@ export default function Sidebar() {
             <Link
               key={href}
               href={href}
+              onClick={onLinkClick}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
                 active
                   ? 'bg-surface-container text-primary border-r-4 border-primary font-semibold scale-[0.98]'
@@ -87,6 +93,31 @@ export default function Sidebar() {
           Sign Out
         </button>
       </div>
-    </aside>
+    </div>
+  );
+}
+
+export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
+  return (
+    <>
+      {/* Desktop: fixed sidebar */}
+      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 z-50">
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile: slide-over overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={onMobileClose}
+            aria-hidden="true"
+          />
+          <aside className="relative z-10 h-full">
+            <SidebarContent onLinkClick={onMobileClose} />
+          </aside>
+        </div>
+      )}
+    </>
   );
 }
