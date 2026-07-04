@@ -13,18 +13,30 @@ const FEATURES = [
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { logout } = useAuthStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (mounted && isAuthenticated) {
+    if (!mounted) return;
+    const token = localStorage.getItem('cgpa_token');
+    if (token) {
+      // Token exists → user is (or was) logged in → send to dashboard.
+      // The dashboard layout will validate the token with the server.
       router.replace('/dashboard');
+    } else {
+      // No token but Zustand may still say isAuthenticated — clear stale state.
+      logout();
     }
-  }, [mounted, isAuthenticated, router]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted]);
 
-  if (!mounted || isAuthenticated) return null;
+  if (!mounted) return null;
+
+  // Don't render login/register if a token exists (redirect pending).
+  const hasToken = mounted && !!localStorage.getItem('cgpa_token');
+  if (hasToken) return null;
 
   return (
     <div className="min-h-screen flex bg-background">

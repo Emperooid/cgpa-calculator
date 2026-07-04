@@ -27,8 +27,10 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
   const handleLogout = async () => {
     try { await authService.logout(); } catch { /* ignore */ }
     logout();
-    router.push('/login');
     toast.success('Logged out');
+    // Full page reload so Next.js Router Cache is cleared — prevents pressing
+    // the forward button from restoring the cached dashboard without auth.
+    window.location.href = '/login';
   };
 
   const name = user?.student?.name ?? 'Student';

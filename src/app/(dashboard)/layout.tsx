@@ -1,38 +1,66 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/store/auth.store';
 import { authService } from '@/services/auth.service';
 import Sidebar from '@/components/layout/Sidebar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated, setUser, logout } = useAuthStore();
+  const pathname = usePathname();
+  const { setUser, logout } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
 
+  // Runs on every dashboard route change — catches back/forward via Next.js Router Cache.
+  // localStorage is the authoritative source; Zustand is just a UI cache on top.
   useEffect(() => {
     if (!mounted) return;
-    if (!isAuthenticated) { router.replace('/login'); return; }
+    const token = localStorage.getItem('cgpa_token');
+    if (!token) {
+      logout();
+      router.replace('/login');
+      return;
+    }
     authService.me().then(setUser).catch(() => {});
-  }, [mounted, isAuthenticated, router, setUser]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, pathname]);
 
-  // Guard against bfcache: browser back/forward restores frozen JS state.
-  // If the user logged out, tokens are gone — kick them to login on restore.
+  // popstate: fires on every browser history move (back/forward) including
+  // Next.js soft navigation that restores from Router Cache without remounting.
   useEffect(() => {
-    const handlePageShow = (e: PageTransitionEvent) => {
-      if (e.persisted && !localStorage.getItem('cgpa_token')) {
+    const guard = () => {
+      if (!localStorage.getItem('cgpa_token')) {
         logout();
         router.replace('/login');
       }
     };
-    window.addEventListener('pageshow', handlePageShow);
-    return () => window.removeEventListener('pageshow', handlePageShow);
-  }, [logout, router]);
+    window.addEventListener('popstate', guard);
+    return () => window.removeEventListener('popstate', guard);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  if (!mounted || !isAuthenticated) return null;
+  // pageshow: fires when browser bfcache restores a frozen page (cross-origin
+  // navigations, hard reload). Different from popstate.
+  useEffect(() => {
+    const guard = (e: PageTransitionEvent) => {
+      if (e.persisted && !localStorage.getItem('cgpa_token')) {
+        logout();
+        window.location.href = '/login';
+      }
+    };
+    window.addEventListener('pageshow', guard);
+    return () => window.removeEventListener('pageshow', guard);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!mounted) return null;
+
+  // Synchronous token check after hydration — prevents any flash of dashboard
+  // content when returning without a valid token.
+  if (!localStorage.getItem('cgpa_token')) return null;
 
   return (
     <div className="flex min-h-screen bg-background">

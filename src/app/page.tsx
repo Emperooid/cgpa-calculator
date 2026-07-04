@@ -9,8 +9,18 @@ const PRED_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuAAOmUxo159
 const PLAN_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCaI-IudRrNNvAjNw2nd9OhVkAIEv9A2th3mkWKZF-bvh0P1pP1M1Fqdpv0cvH28eJARBvtpf5gFQNjJlhNV5crKP34TR9md64eGq927rs2bn7K4RM67m9MNN7eahUBjfWesspM9S1uZh9g1mPCA9aKJzDStBRDcBZIgZDIpq-LUruQaKRNAPFs5v7jU00-DNDcI2uS1RX8R-HySrI6zNovqgQkg9Q5wcuuGU8X6FgQ3OZ0-rof7ljE7sCgliWTMvFTCD22loZ7MzY';
 
 export default function LandingPage() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, logout } = useAuthStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [tokenExists, setTokenExists] = useState(false);
+
+  // Sync Zustand with actual localStorage token on mount.
+  // If isAuthenticated is true but no token exists, clear stale state.
+  useEffect(() => {
+    const token = localStorage.getItem('cgpa_token');
+    setTokenExists(!!token);
+    if (!token && isAuthenticated) logout();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Scroll reveal
   useEffect(() => {
@@ -50,7 +60,7 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             {/* Desktop auth buttons */}
             <div className="hidden md:flex items-center gap-4">
-              {isAuthenticated ? (
+              {tokenExists ? (
                 <Link href="/dashboard" className="bg-primary text-on-primary px-6 py-2.5 rounded-full text-[16px] font-semibold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20">
                   Go to Dashboard
                 </Link>
@@ -68,7 +78,7 @@ export default function LandingPage() {
 
             {/* Mobile: CTA + hamburger */}
             <div className="flex md:hidden items-center gap-2">
-              {isAuthenticated ? (
+              {tokenExists ? (
                 <Link href="/dashboard" className="bg-primary text-on-primary px-4 py-2 rounded-full text-[14px] font-semibold">
                   Dashboard
                 </Link>
@@ -101,7 +111,7 @@ export default function LandingPage() {
                 {item}
               </a>
             ))}
-            {!isAuthenticated && (
+            {!tokenExists && (
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
