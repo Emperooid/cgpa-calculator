@@ -7,7 +7,7 @@ import Sidebar from '@/components/layout/Sidebar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { isAuthenticated, setUser } = useAuthStore();
+  const { isAuthenticated, setUser, logout } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -18,6 +18,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (!isAuthenticated) { router.replace('/login'); return; }
     authService.me().then(setUser).catch(() => {});
   }, [mounted, isAuthenticated, router, setUser]);
+
+  // Guard against bfcache: browser back/forward restores frozen JS state.
+  // If the user logged out, tokens are gone — kick them to login on restore.
+  useEffect(() => {
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted && !localStorage.getItem('cgpa_token')) {
+        logout();
+        router.replace('/login');
+      }
+    };
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
+  }, [logout, router]);
 
   if (!mounted || !isAuthenticated) return null;
 

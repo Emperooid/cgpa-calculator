@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/auth.store';
 
 const HERO_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBSrlrgXRgLXzp7Efmb0aOyKszYPhBHVCw0ERHg2NYXyglb7OcDGUlxhg_JFPCJNwg8Pnjbo11JDE1Ncann4H0viabvpPQsif5mgv36Ejl8Ng3s6uTC5vyVlNXb50CIn0xcVb4pn_tsGmeyojzliD6u5kdogkq4gw0MMxmabtzaHCuRTlN9KukCZ3FO1HuyQZNGZiEvOYFGNUwoBGm5yk0u2rROcJkDsDZbEuAHt_b_4XcGr-hOa8YaEbf7950vG6-T_vbh9ObTci0';
@@ -10,6 +10,7 @@ const PLAN_IMG = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCaI-IudRrN
 
 export default function LandingPage() {
   const { isAuthenticated } = useAuthStore();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Scroll reveal
   useEffect(() => {
@@ -46,23 +47,71 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <div className="flex items-center gap-4">
-            {isAuthenticated ? (
-              <Link href="/dashboard" className="bg-primary text-on-primary px-6 py-2.5 rounded-full text-[16px] font-semibold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20">
-                Go to Dashboard
-              </Link>
-            ) : (
-              <>
-                <Link href="/login" className="text-on-surface-variant hover:text-primary transition-all text-[16px] font-semibold px-4 py-2">
-                  Log In
+          <div className="flex items-center gap-2">
+            {/* Desktop auth buttons */}
+            <div className="hidden md:flex items-center gap-4">
+              {isAuthenticated ? (
+                <Link href="/dashboard" className="bg-primary text-on-primary px-6 py-2.5 rounded-full text-[16px] font-semibold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20">
+                  Go to Dashboard
                 </Link>
-                <Link href="/register" className="bg-primary text-on-primary px-6 py-2.5 rounded-full text-[16px] font-semibold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20">
+              ) : (
+                <>
+                  <Link href="/login" className="text-on-surface-variant hover:text-primary transition-all text-[16px] font-semibold px-4 py-2">
+                    Log In
+                  </Link>
+                  <Link href="/register" className="bg-primary text-on-primary px-6 py-2.5 rounded-full text-[16px] font-semibold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20">
+                    Get Started
+                  </Link>
+                </>
+              )}
+            </div>
+
+            {/* Mobile: CTA + hamburger */}
+            <div className="flex md:hidden items-center gap-2">
+              {isAuthenticated ? (
+                <Link href="/dashboard" className="bg-primary text-on-primary px-4 py-2 rounded-full text-[14px] font-semibold">
+                  Dashboard
+                </Link>
+              ) : (
+                <Link href="/register" className="bg-primary text-on-primary px-4 py-2 rounded-full text-[14px] font-semibold">
                   Get Started
                 </Link>
-              </>
-            )}
+              )}
+              <button
+                onClick={() => setMobileMenuOpen(v => !v)}
+                className="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors"
+                aria-label="Toggle menu"
+              >
+                <span className="material-symbols-outlined">{mobileMenuOpen ? 'close' : 'menu'}</span>
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* Mobile dropdown menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-surface/95 backdrop-blur-md border-t border-surface-container-high px-6 py-4 flex flex-col gap-1">
+            {['Features', 'How it Works', 'Community', 'Pricing'].map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase().replace(' ', '-')}`}
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-[15px] font-semibold text-on-surface-variant hover:text-primary py-3 border-b border-surface-container-high last:border-0 transition-colors"
+              >
+                {item}
+              </a>
+            ))}
+            {!isAuthenticated && (
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="mt-2 text-center text-[15px] font-semibold text-on-surface-variant border border-outline-variant rounded-xl py-3 hover:bg-surface-container transition-colors"
+              >
+                Log In
+              </Link>
+            )}
+          </div>
+        )}
       </nav>
 
       <main className="pt-24">
@@ -79,7 +128,7 @@ export default function LandingPage() {
               Join 10,000+ students across Nigeria
             </div>
 
-            <h1 className="text-[48px] md:text-[64px] leading-[1.1] tracking-tight text-on-surface font-extrabold">
+            <h1 className="text-[34px] sm:text-[48px] md:text-[64px] leading-[1.1] tracking-tight text-on-surface font-extrabold">
               Master Your Academic Journey with{' '}
               <span className="text-primary italic">Intelligence</span>.
             </h1>
@@ -176,7 +225,7 @@ export default function LandingPage() {
           <div className="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center reveal">
             <div className="space-y-6">
               <span className="text-primary text-[12px] font-medium uppercase tracking-wider">Live Tracking</span>
-              <h2 className="text-[36px] font-bold leading-[1.1] tracking-tight text-on-surface">
+              <h2 className="text-[26px] sm:text-[32px] md:text-[36px] font-bold leading-[1.1] tracking-tight text-on-surface">
                 Instant GPA Calculation. No more spreadsheets.
               </h2>
               <p className="text-[16px] text-on-surface-variant leading-relaxed">
@@ -215,7 +264,7 @@ export default function LandingPage() {
             </div>
             <div className="order-1 md:order-2 space-y-6">
               <span className="text-secondary text-[12px] font-medium uppercase tracking-wider">Goal Setting</span>
-              <h2 className="text-[36px] font-bold leading-[1.1] tracking-tight text-on-surface">
+              <h2 className="text-[26px] sm:text-[32px] md:text-[36px] font-bold leading-[1.1] tracking-tight text-on-surface">
                 Predict Your Final Degree Class Today.
               </h2>
               <p className="text-[16px] text-on-surface-variant leading-relaxed">
@@ -240,7 +289,7 @@ export default function LandingPage() {
           <div className="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center reveal">
             <div className="space-y-6">
               <span className="text-tertiary text-[12px] font-medium uppercase tracking-wider">Cognitive Optimization</span>
-              <h2 className="text-[36px] font-bold leading-[1.1] tracking-tight text-on-surface">
+              <h2 className="text-[26px] sm:text-[32px] md:text-[36px] font-bold leading-[1.1] tracking-tight text-on-surface">
                 AI-Powered Study Schedules That Actually Work.
               </h2>
               <p className="text-[16px] text-on-surface-variant leading-relaxed">
