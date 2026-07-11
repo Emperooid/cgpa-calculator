@@ -39,8 +39,9 @@ export default function HistoryPage() {
   if (isLoading) {
     return (
       <div className="space-y-3">
+        <div className="skeleton h-6 w-36 rounded-lg" />
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-20 bg-surface-container-lowest rounded-xl border border-outline-variant animate-pulse" />
+          <div key={i} className="skeleton h-20 rounded-xl" />
         ))}
       </div>
     );
@@ -58,8 +59,8 @@ export default function HistoryPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold text-on-surface">Grade History</h1>
-      <p className="text-on-surface-variant">All your recorded semesters.</p>
+      <h1 className="text-xl font-bold text-on-surface">Grade History</h1>
+      <p className="text-xs text-on-surface-variant">All your recorded semesters.</p>
 
       {history.map((sem) => {
         const key = sem.id;

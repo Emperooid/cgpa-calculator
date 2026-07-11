@@ -12,23 +12,23 @@
   --color-on-primary-fixed-variant: #3323cc;
   --color-inverse-primary: #c3c0ff;
 
-  --color-secondary: #006c49;
+  --color-secondary: #5946d7;
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #6cf8bb;
-  --color-on-secondary-container: #00714d;
-  --color-secondary-fixed: #6ffbbe;
-  --color-secondary-fixed-dim: #4edea3;
-  --color-on-secondary-fixed: #002113;
-  --color-on-secondary-fixed-variant: #005236;
+  --color-secondary-container: #e6e4ff;
+  --color-on-secondary-container: #1d0063;
+  --color-secondary-fixed: #e8e5ff;
+  --color-secondary-fixed-dim: #c8c4ff;
+  --color-on-secondary-fixed: #0e0059;
+  --color-on-secondary-fixed-variant: #3a2cc4;
 
-  --color-tertiary: #684000;
+  --color-tertiary: #7868e6;
   --color-on-tertiary: #ffffff;
-  --color-tertiary-container: #885500;
-  --color-on-tertiary-container: #ffd4a4;
-  --color-tertiary-fixed: #ffddb8;
-  --color-tertiary-fixed-dim: #ffb95f;
-  --color-on-tertiary-fixed: #2a1700;
-  --color-on-tertiary-fixed-variant: #653e00;
+  --color-tertiary-container: #ede9ff;
+  --color-on-tertiary-container: #2c1f7f;
+  --color-tertiary-fixed: #f0ecff;
+  --color-tertiary-fixed-dim: #d4cfff;
+  --color-on-tertiary-fixed: #1a0e5c;
+  --color-on-tertiary-fixed-variant: #5c4fd4;
 
   --color-surface: #f7f9fb;
   --color-surface-dim: #d8dadc;
@@ -94,4 +94,20 @@ body {
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Netflix-style shimmer skeleton loading */
+@keyframes shimmer {
+  0% { background-position: -800px 0; }
+  100% { background-position: 800px 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-container-high) 0px,
+    var(--color-surface-container-lowest) 80px,
+    var(--color-surface-container-high) 160px
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
 }

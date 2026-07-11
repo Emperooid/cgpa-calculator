@@ -37,8 +37,8 @@ function StatCard({ label, value, sub, icon, iconBg }: {
       <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${iconBg}`}>
         <span className="material-symbols-outlined text-on-primary" style={{ fontSize: 20, fontVariationSettings: "'FILL' 1" }}>{icon}</span>
       </div>
-      <p className="text-[24px] font-bold text-on-surface leading-tight">{value}</p>
-      <p className="text-sm font-semibold text-on-surface mt-0.5">{label}</p>
+      <p className="text-xl font-bold text-on-surface leading-tight">{value}</p>
+      <p className="text-[13px] font-semibold text-on-surface mt-0.5">{label}</p>
       {sub && <p className="text-xs text-on-surface-variant mt-1">{sub}</p>}
     </div>
   );
@@ -64,9 +64,18 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-24 bg-surface-container rounded-xl animate-pulse" />
-        ))}
+        <div className="space-y-1.5">
+          <div className="skeleton h-7 w-48 rounded-lg" />
+          <div className="skeleton h-4 w-64 rounded-lg" />
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-24 rounded-xl" />)}
+        </div>
+        <div className="skeleton h-64 rounded-xl" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="skeleton h-48 rounded-xl" />
+          <div className="skeleton h-48 rounded-xl" />
+        </div>
       </div>
     );
   }
@@ -77,10 +86,10 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-[28px] font-bold tracking-tight text-on-background">
+        <h1 className="text-xl font-bold tracking-tight text-on-background">
           {getGreeting()}, {student?.name?.split(' ')[0] ?? 'Student'} 👋
         </h1>
-        <p className="text-sm text-on-surface-variant mt-1">
+        <p className="text-xs text-on-surface-variant mt-1">
           {[student?.school?.name, student?.department?.name, student?.currentLevel ? `${student.currentLevel} Level` : null]
             .filter(Boolean).join(' · ')}
         </p>

@@ -44,8 +44,8 @@ export default function PredictPage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-[28px] font-bold tracking-tight text-on-background">CGPA Predictor</h1>
-        <p className="text-sm text-on-surface-variant mt-1">Find out exactly what GPA you need each semester to hit your target.</p>
+        <h1 className="text-xl font-bold tracking-tight text-on-background">CGPA Predictor</h1>
+        <p className="text-xs text-on-surface-variant mt-1">Find out exactly what GPA you need each semester to hit your target.</p>
       </div>
 
       <div className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-6">
@@ -53,7 +53,7 @@ export default function PredictPage() {
           <span className="material-symbols-outlined text-outline">tune</span>
           Your Academic Details
         </h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
             { key: 'currentCgpa', label: 'Current CGPA', placeholder: '3.65', hint: '0 – 5.0' },
             { key: 'totalUnitsDone', label: 'Units Completed', placeholder: '72', hint: 'All semesters combined' },
@@ -115,7 +115,7 @@ export default function PredictPage() {
             >
               {result.isPossible ? 'check_circle' : 'warning'}
             </span>
-            <h3 className={`text-[18px] font-bold ${result.isPossible ? 'text-on-secondary-container' : 'text-on-error-container'}`}>
+            <h3 className={`text-[15px] font-bold ${result.isPossible ? 'text-on-secondary-container' : 'text-on-error-container'}`}>
               {result.isPossible ? 'Target is Achievable!' : 'Target Not Achievable'}
             </h3>
           </div>
@@ -127,12 +127,12 @@ export default function PredictPage() {
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-surface-container-lowest rounded-xl p-4">
               <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wide mb-1">Current CGPA</p>
-              <p className="text-[28px] font-bold text-on-surface">{result.currentCgpa.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-on-surface">{result.currentCgpa.toFixed(2)}</p>
               <p className="text-xs text-on-surface-variant mt-1">{result.currentClass}</p>
             </div>
             <div className="bg-surface-container-lowest rounded-xl p-4">
               <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wide mb-1">Target CGPA</p>
-              <p className="text-[28px] font-bold text-on-surface">{result.targetCgpa.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-on-surface">{result.targetCgpa.toFixed(2)}</p>
               <p className="text-xs text-on-surface-variant mt-1">{result.targetClass}</p>
             </div>
             {result.isPossible && result.requiredGPA !== null && (
@@ -140,19 +140,19 @@ export default function PredictPage() {
                 <div className="absolute inset-0 bg-linear-to-r from-primary to-surface-tint opacity-80 pointer-events-none" />
                 <div className="relative z-10">
                   <p className="text-[11px] font-semibold text-primary-fixed opacity-80 uppercase tracking-wide mb-1">Required GPA Per Remaining Semester</p>
-                  <p className="text-[36px] font-bold leading-none">{result.requiredGPA.toFixed(2)}</p>
+                  <p className="text-3xl font-bold leading-none">{result.requiredGPA.toFixed(2)}</p>
                   <p className="text-primary-fixed text-xs mt-1 opacity-70">over the remaining {result.remainingUnits} units</p>
                 </div>
               </div>
             )}
             <div className="bg-surface-container-lowest rounded-xl p-4">
               <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wide mb-1">Max Achievable</p>
-              <p className="text-[28px] font-bold text-on-surface">{result.maxAchievableCgpa.toFixed(2)}</p>
+              <p className="text-2xl font-bold text-on-surface">{result.maxAchievableCgpa.toFixed(2)}</p>
               <p className="text-xs text-on-surface-variant mt-1">if you score all A's</p>
             </div>
             <div className="bg-surface-container-lowest rounded-xl p-4">
               <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wide mb-1">Remaining Units</p>
-              <p className="text-[28px] font-bold text-on-surface">{result.remainingUnits}</p>
+              <p className="text-2xl font-bold text-on-surface">{result.remainingUnits}</p>
               <p className="text-xs text-on-surface-variant mt-1">credit units left</p>
             </div>
           </div>

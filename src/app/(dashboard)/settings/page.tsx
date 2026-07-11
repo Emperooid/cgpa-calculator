@@ -136,8 +136,8 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-[28px] font-bold tracking-tight text-on-background">Settings</h1>
-        <p className="text-sm text-on-surface-variant mt-1">Manage your academic profile and account.</p>
+        <h1 className="text-xl font-bold tracking-tight text-on-background">Settings</h1>
+        <p className="text-xs text-on-surface-variant mt-1">Manage your academic profile and account.</p>
       </div>
 
       {/* Account info */}

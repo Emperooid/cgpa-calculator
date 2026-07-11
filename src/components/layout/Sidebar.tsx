@@ -22,36 +22,34 @@ interface SidebarProps {
 
 function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
   const pathname = usePathname();
-  const router = useRouter();
   const { user, logout } = useAuthStore();
 
   const handleLogout = async () => {
     try { await authService.logout(); } catch { /* ignore */ }
     logout();
     toast.success('Logged out');
-    // Full page reload so Next.js Router Cache is cleared — prevents pressing
-    // the forward button from restoring the cached dashboard without auth.
     window.location.href = '/login';
   };
 
-  const name = user?.student?.name ?? 'Student';
+  const isAnon = user?.email?.endsWith('@gradepath.local') ?? false;
+  const name = isAnon ? 'Guest' : (user?.student?.name ?? 'Student');
   const initial = name[0]?.toUpperCase() ?? 'S';
 
   return (
     <div className="h-full w-64 bg-surface-container-low border-r border-outline-variant flex flex-col">
       {/* Logo */}
-      <div className="p-6 flex items-center gap-3 border-b border-outline-variant">
-        <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-lg">
+      <div className="px-4 py-3.5 flex items-center gap-2.5 border-b border-outline-variant">
+        <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-sm shrink-0">
           G
         </div>
         <div>
-          <h1 className="text-[20px] font-bold leading-tight text-primary">GradePath</h1>
-          <p className="text-[11px] font-semibold text-on-surface-variant">Academic Intelligence</p>
+          <h1 className="text-[15px] font-bold leading-tight text-primary">GradePath</h1>
+          <p className="text-[10px] font-semibold text-on-surface-variant">Academic Intelligence</p>
         </div>
       </div>
 
       {/* Nav links */}
-      <nav className="flex-1 overflow-y-auto py-4 px-3 flex flex-col gap-0.5">
+      <nav className="flex-1 overflow-y-auto py-3 px-2.5 flex flex-col gap-0.5">
         {NAV.map(({ href, label, icon }) => {
           const active = pathname === href;
           return (
@@ -59,15 +57,17 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
               key={href}
               href={href}
               onClick={onLinkClick}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+              className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all duration-150 ${
                 active
-                  ? 'bg-surface-container text-primary border-r-4 border-primary font-semibold scale-[0.98]'
-                  : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface hover:scale-[0.98]'
+                  ? 'bg-surface-container text-primary border-r-4 border-primary font-semibold'
+                  : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
               }`}
             >
               <span
                 className="material-symbols-outlined"
-                style={active ? { fontVariationSettings: "'FILL' 1" } : undefined}
+                style={active
+                  ? { fontVariationSettings: "'FILL' 1", fontSize: 18 }
+                  : { fontSize: 18 }}
               >
                 {icon}
               </span>
@@ -78,21 +78,25 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
       </nav>
 
       {/* User + logout */}
-      <div className="p-4 border-t border-outline-variant flex flex-col gap-0.5 px-3">
-        <div className="flex items-center gap-3 px-3 py-2 mb-1">
-          <div className="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-semibold text-sm shrink-0">
-            {initial}
+      <div className="p-2.5 border-t border-outline-variant flex flex-col gap-0.5">
+        <div className="flex items-center gap-2.5 px-3 py-2 mb-0.5">
+          <div className="w-7 h-7 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-semibold text-xs shrink-0">
+            {isAnon ? (
+              <span className="material-symbols-outlined" style={{ fontSize: 14, fontVariationSettings: "'FILL' 1" }}>person</span>
+            ) : initial}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-on-surface truncate">{name}</p>
-            <p className="text-xs text-on-surface-variant truncate">{user?.email}</p>
+            <p className="text-[13px] font-semibold text-on-surface truncate">{name}</p>
+            <p className="text-[11px] text-on-surface-variant truncate">
+              {isAnon ? 'Guest Account' : user?.email}
+            </p>
           </div>
         </div>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-on-surface-variant hover:bg-surface-container-high hover:text-error transition-colors w-full text-left"
+          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-on-surface-variant hover:bg-surface-container-high hover:text-error transition-colors w-full text-left"
         >
-          <span className="material-symbols-outlined">logout</span>
+          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>logout</span>
           Sign Out
         </button>
       </div>

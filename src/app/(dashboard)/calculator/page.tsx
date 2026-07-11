@@ -130,8 +130,8 @@ export default function CalculatorPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[28px] font-bold tracking-tight text-on-background">GPA Calculator</h1>
-        <p className="text-sm text-on-surface-variant mt-1">Select your semester, enter grades, and save to your record.</p>
+        <h1 className="text-xl font-bold tracking-tight text-on-background">GPA Calculator</h1>
+        <p className="text-xs text-on-surface-variant mt-1">Select your semester, enter grades, and save to your record.</p>
       </div>
 
       {/* Semester selector */}
@@ -140,7 +140,7 @@ export default function CalculatorPage() {
           <span className="material-symbols-outlined text-outline">tune</span>
           Semester Details
         </h2>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className={labelCls}>Level</label>
             <div className="relative">
@@ -178,12 +178,12 @@ export default function CalculatorPage() {
           <div className="absolute inset-0 bg-linear-to-r from-primary to-surface-tint opacity-80 pointer-events-none" />
           <div className="relative z-10">
             <p className="text-[11px] font-semibold text-primary-fixed uppercase tracking-wider mb-1">Live GPA Preview</p>
-            <p className="text-[42px] font-bold leading-none">{liveResult.gpa.toFixed(2)}</p>
-            <p className="text-primary-fixed text-sm mt-1">{liveResult.totalUnits} credit units</p>
+            <p className="text-4xl font-bold leading-none">{liveResult.gpa.toFixed(2)}</p>
+            <p className="text-primary-fixed text-xs mt-1">{liveResult.totalUnits} credit units</p>
           </div>
-          <div className="relative z-10 text-right bg-surface-tint/40 backdrop-blur-md px-5 py-3 rounded-lg border border-on-primary/10">
-            <p className="text-[11px] font-semibold text-primary-fixed opacity-80 uppercase tracking-wide mb-1">Grade Class</p>
-            <p className="text-[20px] font-bold">{gradeClass(liveResult.gpa)}</p>
+          <div className="relative z-10 text-right bg-surface-tint/40 backdrop-blur-md px-4 py-2.5 rounded-lg border border-on-primary/10">
+            <p className="text-[10px] font-semibold text-primary-fixed opacity-80 uppercase tracking-wide mb-1">Grade Class</p>
+            <p className="text-[16px] font-bold">{gradeClass(liveResult.gpa)}</p>
           </div>
         </div>
       )}
