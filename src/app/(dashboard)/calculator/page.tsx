@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { coursesService } from '@/services/courses.service';
 import { gpaService } from '@/services/gpa.service';
@@ -82,19 +83,48 @@ export default function CalculatorPage() {
   const updateGrade = (i: number, grade: string) =>
     setRows(prev => prev.map((r, idx) => idx === i ? { ...r, grade } : r));
 
-  const handleSubmit = () => {
-    const realGrades = rows
-      .filter(r => !r.courseId.startsWith('manual-'))
-      .map(r => ({ courseId: r.courseId, grade: r.grade }));
+  const [contributing, setContributing] = useState(false);
 
-    if (rows.some(r => r.courseId.startsWith('manual-'))) {
-      toast('Manually added courses are not saved — only database courses are stored.', { icon: 'ℹ️' });
+  const handleSubmit = async () => {
+    if (!rows.length) return;
+
+    let allRows = [...rows];
+    const manualRows = allRows.filter(r => r.courseId.startsWith('manual-'));
+
+    // Auto-contribute manual courses to the DB so they get real IDs
+    if (manualRows.length > 0) {
+      if (!dept) {
+        toast.error('Set your department in Settings before saving manual courses.');
+        return;
+      }
+      setContributing(true);
+      try {
+        const created = await Promise.all(
+          manualRows.map(r =>
+            coursesService.create({
+              code: r.code, title: r.title, units: r.units,
+              departmentId: dept, level, semester, isCompulsory: false,
+            }),
+          ),
+        );
+        allRows = allRows.map(r => {
+          if (!r.courseId.startsWith('manual-')) return r;
+          const idx = manualRows.findIndex(m => m.courseId === r.courseId);
+          return { ...r, courseId: created[idx].id };
+        });
+        setRows(allRows);
+        toast.success(`${manualRows.length} manual course${manualRows.length !== 1 ? 's' : ''} added to database`);
+      } catch (e: any) {
+        toast.error(e.response?.data?.message ?? 'Could not save manual courses');
+        setContributing(false);
+        return;
+      } finally {
+        setContributing(false);
+      }
     }
-    if (!realGrades.length) {
-      toast.error("No database courses to save. Add your department's courses via Contribute first.");
-      return;
-    }
-    submitMutation.mutate(realGrades);
+
+    const grades = allRows.map(r => ({ courseId: r.courseId, grade: r.grade }));
+    submitMutation.mutate(grades);
   };
 
   return (
@@ -172,9 +202,26 @@ export default function CalculatorPage() {
         </div>
 
         {rows.length === 0 ? (
-          <div className="p-10 text-center text-on-surface-variant">
+          <div className="p-10 text-center">
             <span className="material-symbols-outlined text-outline mb-3" style={{ fontSize: 40, display: 'block' }}>library_books</span>
-            <p className="text-sm">No courses loaded. Add courses manually below.</p>
+            {dept && !loadingCourses ? (
+              <>
+                <p className="text-sm font-semibold text-on-surface mb-1">No courses for this semester yet</p>
+                <p className="text-sm text-on-surface-variant mb-4 max-w-xs mx-auto">
+                  Your department hasn&apos;t had courses added for this level and semester. Be the first to contribute!
+                </p>
+                <Link
+                  href="/contribute"
+                  className="inline-flex items-center gap-2 bg-primary text-on-primary text-sm font-semibold px-4 py-2 rounded-lg hover:bg-surface-tint transition-colors"
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 16 }}>volunteer_activism</span>
+                  Go to Contribute
+                </Link>
+                <p className="text-xs text-on-surface-variant mt-4">Or add courses manually below to calculate without saving.</p>
+              </>
+            ) : (
+              <p className="text-sm text-on-surface-variant">No courses loaded. Add courses manually below.</p>
+            )}
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -283,10 +330,15 @@ export default function CalculatorPage() {
 
       <button
         onClick={handleSubmit}
-        disabled={!rows.some(r => !r.courseId.startsWith('manual-')) || submitMutation.isPending}
+        disabled={!rows.length || submitMutation.isPending || contributing}
         className="flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-lg shadow-sm hover:bg-surface-tint transition-all disabled:opacity-50"
       >
-        {submitMutation.isPending ? (
+        {contributing ? (
+          <>
+            <span className="material-symbols-outlined animate-spin" style={{ fontSize: 18 }}>progress_activity</span>
+            Adding courses…
+          </>
+        ) : submitMutation.isPending ? (
           <>
             <span className="material-symbols-outlined animate-spin" style={{ fontSize: 18 }}>progress_activity</span>
             Saving…

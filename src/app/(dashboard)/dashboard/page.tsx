@@ -6,6 +6,28 @@ import { useAuthStore } from '@/store/auth.store';
 import { Analytics, GRADE_CLASSES } from '@/types';
 import Link from 'next/link';
 
+function StepCard({ num, icon, title, desc, href }: { num: number; icon: string; title: string; desc: string; href?: string }) {
+  const content = (
+    <div className={`bg-surface-container-lowest rounded-xl border p-5 flex flex-col gap-3 transition-all ${href ? 'border-outline-variant hover:border-primary hover:shadow-md cursor-pointer' : 'border-outline-variant/50 opacity-70'}`}>
+      <div className="flex items-center gap-3">
+        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary text-sm font-bold shrink-0">{num}</div>
+        <span className="material-symbols-outlined text-primary" style={{ fontSize: 22, fontVariationSettings: "'FILL' 1" }}>{icon}</span>
+      </div>
+      <div>
+        <p className="text-sm font-semibold text-on-surface">{title}</p>
+        <p className="text-xs text-on-surface-variant mt-1">{desc}</p>
+      </div>
+      {href && (
+        <span className="text-xs font-semibold text-primary flex items-center gap-1 mt-auto">
+          Get started
+          <span className="material-symbols-outlined" style={{ fontSize: 14 }}>arrow_forward</span>
+        </span>
+      )}
+    </div>
+  );
+  return href ? <Link href={href}>{content}</Link> : content;
+}
+
 function StatCard({ label, value, sub, icon, iconBg }: {
   label: string; value: string | number; sub?: string;
   icon: string; iconBg: string;
@@ -66,18 +88,39 @@ export default function DashboardPage() {
 
       {/* Empty state */}
       {noCgpa ? (
-        <div className="bg-primary-container/30 border border-on-primary-container/10 rounded-xl p-8 text-center">
-          <div className="w-14 h-14 rounded-full bg-primary-container flex items-center justify-center mx-auto mb-4">
-            <span className="material-symbols-outlined text-on-primary-container" style={{ fontSize: 28, fontVariationSettings: "'FILL' 1" }}>book</span>
+        <div className="space-y-5">
+          <div className="bg-primary-container/30 border border-on-primary-container/10 rounded-xl p-8 text-center">
+            <div className="w-14 h-14 rounded-full bg-primary-container flex items-center justify-center mx-auto mb-4">
+              <span className="material-symbols-outlined text-on-primary-container" style={{ fontSize: 28, fontVariationSettings: "'FILL' 1" }}>school</span>
+            </div>
+            <h3 className="text-[18px] font-bold text-on-surface mb-2">Welcome to GradePath!</h3>
+            <p className="text-sm text-on-surface-variant max-w-xs mx-auto">
+              Follow the steps below to set up your academic record. It only takes a minute.
+            </p>
           </div>
-          <h3 className="text-[16px] font-semibold text-on-surface mb-2">No grades yet</h3>
-          <p className="text-sm text-on-surface-variant mb-5 max-w-xs mx-auto">
-            Start by entering your semester grades to calculate your GPA and CGPA.
-          </p>
-          <Link href="/calculator" className="inline-flex items-center gap-2 bg-primary text-on-primary text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-surface-tint transition-colors">
-            Enter Grades
-            <span className="material-symbols-outlined" style={{ fontSize: 16 }}>arrow_forward</span>
-          </Link>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <StepCard
+              num={1}
+              icon="volunteer_activism"
+              title="Add Your Courses"
+              desc="Go to Contribute and add your department's courses for each semester."
+              href="/contribute"
+            />
+            <StepCard
+              num={2}
+              icon="calculate"
+              title="Enter Your Grades"
+              desc="Open the Calculator, pick your semester, and assign grades to each course."
+              href="/calculator"
+            />
+            <StepCard
+              num={3}
+              icon="insights"
+              title="Track Your CGPA"
+              desc="Your CGPA, GPA trend, grade distribution, and class chances will appear here."
+            />
+          </div>
         </div>
       ) : (
         <>

@@ -12,6 +12,7 @@ const NAV = [
   { href: '/plan', label: 'Plan', icon: 'calendar_month' },
   { href: '/history', label: 'History', icon: 'history' },
   { href: '/contribute', label: 'Contribute', icon: 'volunteer_activism' },
+  { href: '/settings', label: 'Settings', icon: 'settings' },
 ];
 
 interface SidebarProps {
