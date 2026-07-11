@@ -1,9 +1,9 @@
 'use client';
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { gpaService } from '@/services/gpa.service';
-import { Prediction, GRADE_CLASSES } from '@/types';
+import { Prediction, GRADE_CLASSES, Analytics } from '@/types';
 
 const inputCls = 'w-full px-4 py-2.5 bg-surface border border-outline-variant rounded-lg text-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-shadow';
 const labelCls = 'block text-[11px] font-semibold text-on-surface-variant mb-2 uppercase tracking-wide';
@@ -11,6 +11,22 @@ const labelCls = 'block text-[11px] font-semibold text-on-surface-variant mb-2 u
 export default function PredictPage() {
   const [form, setForm] = useState({ currentCgpa: '', totalUnitsDone: '', targetCgpa: '', remainingUnits: '' });
   const [result, setResult] = useState<Prediction | null>(null);
+
+  const { data: analytics } = useQuery<Analytics>({
+    queryKey: ['analytics'],
+    queryFn: gpaService.getAnalytics,
+    retry: false,
+  });
+
+  // Pre-fill from analytics on first load
+  useEffect(() => {
+    if (!analytics || analytics.totalUnitsCompleted === 0) return;
+    setForm(prev => ({
+      ...prev,
+      currentCgpa: prev.currentCgpa || analytics.cgpa.toFixed(2),
+      totalUnitsDone: prev.totalUnitsDone || String(analytics.totalUnitsCompleted),
+    }));
+  }, [analytics]);
 
   const mutation = useMutation({
     mutationFn: () => gpaService.quickPredict({

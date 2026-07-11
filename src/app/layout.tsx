@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import QueryProvider from '@/components/providers/QueryProvider';
-import BackendWakeup from '@/components/providers/BackendWakeup';
+import GuestAuth from '@/components/providers/GuestAuth';
 import './globals.css';
 
 const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
@@ -23,8 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-full bg-background text-on-background" suppressHydrationWarning>
         <QueryProvider>
-          <BackendWakeup />
-          {children}
+          <GuestAuth>
+            {children}
+          </GuestAuth>
         </QueryProvider>
         <Toaster position="top-right" />
       </body>

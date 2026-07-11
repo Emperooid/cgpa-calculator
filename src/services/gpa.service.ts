@@ -14,4 +14,7 @@ export const gpaService = {
 
   quickPredict: (data: { currentCgpa: number; totalUnitsDone: number; targetCgpa: number; remainingUnits: number; scale?: string }) =>
     api.post('/gpa/predict/quick', data).then(r => r.data),
+
+  deleteSemester: (semesterRecordId: string) =>
+    api.delete(`/gpa/semester/${semesterRecordId}`).then(r => r.data),
 };

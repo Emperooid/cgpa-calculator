@@ -1,6 +1,8 @@
 'use client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { studentsService } from '@/services/students.service';
+import { gpaService } from '@/services/gpa.service';
 import { SemesterRecord } from '@/types';
 import { useState } from 'react';
 
@@ -14,12 +16,25 @@ const GRADE_COLOR: Record<string, string> = {
 };
 
 export default function HistoryPage() {
+  const queryClient = useQueryClient();
   const { data: history, isLoading } = useQuery<SemesterRecord[]>({
     queryKey: ['history'],
     queryFn: studentsService.getHistory,
   });
 
   const [open, setOpen] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => gpaService.deleteSemester(id),
+    onSuccess: () => {
+      toast.success('Semester deleted');
+      setConfirmDelete(null);
+      queryClient.invalidateQueries({ queryKey: ['history'] });
+      queryClient.invalidateQueries({ queryKey: ['analytics'] });
+    },
+    onError: (e: any) => toast.error(e.response?.data?.message ?? 'Delete failed'),
+  });
 
   if (isLoading) {
     return (
@@ -64,11 +79,18 @@ export default function HistoryPage() {
                   <p className="text-sm text-outline">{sem.year} · {sem.totalUnits} units</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <div className="text-right">
                   <p className="text-xs text-outline">GPA</p>
                   <p className="text-xl font-bold text-primary">{sem.gpa.toFixed(2)}</p>
                 </div>
+                <button
+                  onClick={e => { e.stopPropagation(); setConfirmDelete(key); }}
+                  className="p-1.5 rounded-lg text-outline hover:text-error hover:bg-error-container transition-colors"
+                  title="Delete semester"
+                >
+                  <span className="material-symbols-outlined" style={{ fontSize: 18 }}>delete</span>
+                </button>
                 <span
                   className={`material-symbols-outlined text-outline transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                   style={{ fontSize: 20 }}
@@ -111,6 +133,37 @@ export default function HistoryPage() {
           </div>
         );
       })}
+      {/* Confirm delete dialog */}
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-xl p-6 max-w-sm w-full">
+            <div className="w-12 h-12 rounded-full bg-error-container flex items-center justify-center mx-auto mb-4">
+              <span className="material-symbols-outlined text-error" style={{ fontSize: 24 }}>delete</span>
+            </div>
+            <h3 className="text-[16px] font-semibold text-on-surface text-center mb-2">Delete this semester?</h3>
+            <p className="text-sm text-on-surface-variant text-center mb-6">
+              This will remove all grades for this semester and recalculate your CGPA. This cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setConfirmDelete(null)}
+                className="flex-1 border border-outline-variant text-on-surface font-semibold py-2.5 rounded-lg hover:bg-surface-container transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => deleteMutation.mutate(confirmDelete)}
+                disabled={deleteMutation.isPending}
+                className="flex-1 bg-error text-on-error font-semibold py-2.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {deleteMutation.isPending ? (
+                  <span className="material-symbols-outlined animate-spin" style={{ fontSize: 16 }}>progress_activity</span>
+                ) : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
