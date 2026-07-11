@@ -66,8 +66,8 @@ export default function PlanPage() {
       {/* Page header */}
       <header className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-[28px] font-bold leading-9 tracking-tight text-on-background">Study Plan</h2>
-          <p className="text-sm text-on-surface-variant mt-1">Optimize your academic routine for maximum retention.</p>
+          <h2 className="text-xl font-bold tracking-tight text-on-background">Study Plan</h2>
+          <p className="text-xs text-on-surface-variant mt-1">Optimize your academic routine for maximum retention.</p>
         </div>
         <button
           onClick={() => generateMutation.mutate()}
@@ -86,7 +86,7 @@ export default function PlanPage() {
 
           {/* Active Plan Banner */}
           {planLoading && (
-            <div className="h-28 rounded-xl bg-surface-container-high animate-pulse" />
+            <div className="skeleton h-28 rounded-xl" />
           )}
           {plan && (
             <div className="relative overflow-hidden rounded-xl bg-primary text-on-primary shadow-sm p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -97,7 +97,7 @@ export default function PlanPage() {
                 </div>
                 <div>
                   <p className="text-[11px] font-semibold text-primary-fixed uppercase tracking-wider mb-1">Active Target</p>
-                  <h3 className="text-[20px] font-bold leading-7">{plan.targetGrade}</h3>
+                  <h3 className="text-[16px] font-bold leading-6">{plan.targetGrade}</h3>
                 </div>
               </div>
               <div className="relative z-10 flex gap-6 bg-surface-tint/40 backdrop-blur-md px-6 py-3 rounded-lg border border-on-primary/10">
@@ -190,8 +190,8 @@ export default function PlanPage() {
           {/* Weekly Execution */}
           {plan && (
             <div>
-              <h3 className="text-[20px] font-semibold text-on-surface mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined">calendar_view_week</span>
+              <h3 className="text-base font-semibold text-on-surface mb-4 flex items-center gap-2">
+                <span className="material-symbols-outlined" style={{ fontSize: 18 }}>calendar_view_week</span>
                 Weekly Execution
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -270,7 +270,7 @@ export default function PlanPage() {
           <div className="bg-surface-container-lowest border border-outline-variant shadow-sm rounded-xl p-6">
             <h3 className="text-[16px] font-semibold text-on-surface mb-4">Current Trajectory</h3>
             <div className="flex items-end gap-2 mb-2">
-              <span className="text-[36px] font-bold leading-none tracking-tight text-primary">
+              <span className="text-3xl font-bold leading-none tracking-tight text-primary">
                 {currentCgpa > 0 ? currentCgpa.toFixed(1) : '—'}
               </span>
               <span className="text-[16px] font-semibold text-on-surface-variant pb-1">/ 5.0 CGPA</span>

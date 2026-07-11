@@ -84,9 +84,9 @@ export default function ContributePage() {
         <p className="text-on-surface-variant mt-1">Help your fellow students by adding your school, department, and courses.</p>
       </div>
 
-      <div className="bg-primary-container/30 border border-primary/20 rounded-xl p-4 flex gap-3">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-4 flex gap-3">
         <span className="material-symbols-outlined text-primary mt-0.5 shrink-0" style={{ fontSize: 20 }}>group</span>
-        <p className="text-sm text-on-primary-container">
+        <p className="text-sm text-on-surface">
           Once you add courses, every student from your department will have them automatically loaded in the calculator. Be the first contributor for your department!
         </p>
       </div>

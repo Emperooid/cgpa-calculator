@@ -194,17 +194,22 @@ export default function CalculatorPage() {
           <h2 className="text-[16px] font-semibold text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-outline">list_alt</span>
             Courses
-            {loadingCourses && <span className="text-on-surface-variant text-sm font-normal">Loading…</span>}
           </h2>
           <span className="text-xs font-semibold text-on-surface-variant bg-surface-container px-2.5 py-1 rounded-full">
             {rows.length} course{rows.length !== 1 ? 's' : ''}
           </span>
         </div>
 
-        {rows.length === 0 ? (
+        {loadingCourses ? (
+          <div className="p-4 space-y-2">
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className="skeleton h-11 rounded-lg" />
+            ))}
+          </div>
+        ) : rows.length === 0 ? (
           <div className="p-10 text-center">
             <span className="material-symbols-outlined text-outline mb-3" style={{ fontSize: 40, display: 'block' }}>library_books</span>
-            {dept && !loadingCourses ? (
+            {dept ? (
               <>
                 <p className="text-sm font-semibold text-on-surface mb-1">No courses for this semester yet</p>
                 <p className="text-sm text-on-surface-variant mb-4 max-w-xs mx-auto">
@@ -220,7 +225,7 @@ export default function CalculatorPage() {
                 <p className="text-xs text-on-surface-variant mt-4">Or add courses manually below to calculate without saving.</p>
               </>
             ) : (
-              <p className="text-sm text-on-surface-variant">No courses loaded. Add courses manually below.</p>
+              <p className="text-sm text-on-surface-variant">Set your department in Settings to auto-load courses, or add them manually below.</p>
             )}
           </div>
         ) : (

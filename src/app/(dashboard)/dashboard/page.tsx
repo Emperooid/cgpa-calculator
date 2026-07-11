@@ -145,7 +145,7 @@ export default function DashboardPage() {
             />
             <StatCard
               label="Units Completed" value={analytics!.totalUnitsCompleted}
-              sub="credit units" icon="menu_book" iconBg="bg-tertiary-container"
+              sub="credit units" icon="menu_book" iconBg="bg-tertiary"
             />
             <StatCard
               label="Strongest Course"
