@@ -12,7 +12,7 @@ export default function PredictPage() {
   const [form, setForm] = useState({ currentCgpa: '', totalUnitsDone: '', targetCgpa: '', remainingUnits: '' });
   const [result, setResult] = useState<Prediction | null>(null);
 
-  const { data: analytics } = useQuery<Analytics>({
+  const { data: analytics, isLoading: analyticsLoading } = useQuery<Analytics>({
     queryKey: ['analytics'],
     queryFn: gpaService.getAnalytics,
     retry: false,
@@ -40,6 +40,18 @@ export default function PredictPage() {
 
   const update = (k: string, v: string) => setForm(p => ({ ...p, [k]: v }));
   const canSubmit = form.currentCgpa && form.totalUnitsDone && form.targetCgpa && form.remainingUnits && !mutation.isPending;
+
+  if (analyticsLoading) {
+    return (
+      <div className="space-y-6 max-w-2xl">
+        <div className="space-y-1.5">
+          <div className="skeleton h-7 w-40 rounded-lg" />
+          <div className="skeleton h-4 w-72 rounded-lg" />
+        </div>
+        <div className="skeleton h-80 rounded-xl" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-2xl">
