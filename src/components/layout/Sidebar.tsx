@@ -92,13 +92,24 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
             </p>
           </div>
         </div>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-on-surface-variant hover:bg-surface-container-high hover:text-error transition-colors w-full text-left"
-        >
-          <span className="material-symbols-outlined" style={{ fontSize: 18 }}>logout</span>
-          Sign Out
-        </button>
+        {isAnon ? (
+          <Link
+            href="/settings"
+            onClick={onLinkClick}
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-primary hover:bg-primary/10 transition-colors w-full"
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>verified_user</span>
+            Claim Account
+          </Link>
+        ) : (
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] text-on-surface-variant hover:bg-surface-container-high hover:text-error transition-colors w-full text-left"
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: 18 }}>logout</span>
+            Sign Out
+          </button>
+        )}
       </div>
     </div>
   );

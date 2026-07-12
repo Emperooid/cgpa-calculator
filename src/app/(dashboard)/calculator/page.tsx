@@ -338,17 +338,7 @@ export default function CalculatorPage() {
         disabled={!rows.length || submitMutation.isPending || contributing}
         className="flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-lg shadow-sm hover:bg-surface-tint transition-all disabled:opacity-50"
       >
-        {contributing ? (
-          <>
-            <span className="material-symbols-outlined animate-spin" style={{ fontSize: 18 }}>progress_activity</span>
-            Adding courses…
-          </>
-        ) : submitMutation.isPending ? (
-          <>
-            <span className="material-symbols-outlined animate-spin" style={{ fontSize: 18 }}>progress_activity</span>
-            Saving…
-          </>
-        ) : (
+        {contributing ? 'Adding courses…' : submitMutation.isPending ? 'Saving…' : (
           <>
             <span className="material-symbols-outlined" style={{ fontSize: 18 }}>save</span>
             Save & Calculate CGPA

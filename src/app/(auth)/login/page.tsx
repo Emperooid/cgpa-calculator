@@ -111,14 +111,7 @@ export default function LoginPage() {
           disabled={loading}
           className="w-full bg-primary text-on-primary font-semibold py-3 rounded-lg shadow-sm hover:bg-surface-tint focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 disabled:opacity-50 flex items-center justify-center gap-2"
         >
-          {loading ? (
-            <>
-              <span className="material-symbols-outlined animate-spin" style={{ fontSize: 18 }}>progress_activity</span>
-              Signing in…
-            </>
-          ) : (
-            'Sign In'
-          )}
+          {loading ? 'Signing in…' : 'Sign In'}
         </button>
       </form>
 

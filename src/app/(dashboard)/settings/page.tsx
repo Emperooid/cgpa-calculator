@@ -224,8 +224,7 @@ export default function SettingsPage() {
                       </p>
                       <button type="button" onClick={addSchool} disabled={creatingSchool}
                         className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-on-primary text-xs font-semibold rounded-lg hover:bg-surface-tint disabled:opacity-60 transition-colors shrink-0">
-                        {creatingSchool ? <span className="material-symbols-outlined animate-spin" style={{ fontSize: 12 }}>progress_activity</span>
-                          : <span className="material-symbols-outlined" style={{ fontSize: 12 }}>add</span>}
+                        <span className="material-symbols-outlined" style={{ fontSize: 12 }}>add</span>
                         Add school
                       </button>
                     </div>
@@ -266,8 +265,7 @@ export default function SettingsPage() {
                         className={`${inputCls} flex-1`} />
                       <button type="button" onClick={addFaculty} disabled={!newFacultyName.trim() || creatingFaculty}
                         className="flex items-center gap-1 px-3 py-2.5 bg-primary text-on-primary text-sm rounded-lg hover:bg-surface-tint disabled:opacity-50 transition-colors shrink-0">
-                        {creatingFaculty ? <span className="material-symbols-outlined animate-spin" style={{ fontSize: 16 }}>progress_activity</span>
-                          : <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span>}
+                        <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span>
                         Add
                       </button>
                     </div>
@@ -298,8 +296,7 @@ export default function SettingsPage() {
                       className={`${inputCls} flex-1`} />
                     <button type="button" onClick={addDept} disabled={!newDeptName.trim() || creatingDept}
                       className="flex items-center gap-1 px-3 py-2.5 bg-primary text-on-primary text-sm rounded-lg hover:bg-surface-tint disabled:opacity-50 transition-colors shrink-0">
-                      {creatingDept ? <span className="material-symbols-outlined animate-spin" style={{ fontSize: 16 }}>progress_activity</span>
-                        : <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span>}
+                      <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span>
                       Add
                     </button>
                   </div>
@@ -319,9 +316,7 @@ export default function SettingsPage() {
 
             <button onClick={() => setupMutation.mutate()} disabled={!canSetup}
               className="w-full bg-primary text-on-primary font-semibold py-3 rounded-lg shadow-sm hover:bg-surface-tint transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-              {setupMutation.isPending ? (
-                <><span className="material-symbols-outlined animate-spin" style={{ fontSize: 18 }}>progress_activity</span>Setting up…</>
-              ) : (
+              {setupMutation.isPending ? 'Setting up…' : (
                 <><span className="material-symbols-outlined" style={{ fontSize: 18 }}>check_circle</span>Complete Setup</>
               )}
             </button>
@@ -363,9 +358,7 @@ export default function SettingsPage() {
             </div>
             <button onClick={() => updateMutation.mutate()} disabled={updateMutation.isPending || !name.trim()}
               className="w-full bg-primary text-on-primary font-semibold py-3 rounded-lg shadow-sm hover:bg-surface-tint transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-              {updateMutation.isPending ? (
-                <><span className="material-symbols-outlined animate-spin" style={{ fontSize: 18 }}>progress_activity</span>Saving…</>
-              ) : (
+              {updateMutation.isPending ? 'Saving…' : (
                 <><span className="material-symbols-outlined" style={{ fontSize: 18 }}>save</span>Save Changes</>
               )}
             </button>
@@ -407,9 +400,7 @@ export default function SettingsPage() {
             </div>
             <button onClick={() => claimMutation.mutate()} disabled={!canClaim}
               className="w-full bg-secondary text-on-secondary font-semibold py-3 rounded-lg shadow-sm hover:opacity-90 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
-              {claimMutation.isPending ? (
-                <><span className="material-symbols-outlined animate-spin" style={{ fontSize: 18 }}>progress_activity</span>Saving…</>
-              ) : (
+              {claimMutation.isPending ? 'Saving…' : (
                 <><span className="material-symbols-outlined" style={{ fontSize: 18 }}>verified_user</span>Claim My Account</>
               )}
             </button>

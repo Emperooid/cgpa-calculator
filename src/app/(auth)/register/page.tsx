@@ -276,9 +276,7 @@ export default function RegisterPage() {
                       </p>
                       <button type="button" onClick={addSchool} disabled={creatingSchool}
                         className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-on-primary text-xs font-semibold rounded-lg hover:bg-surface-tint disabled:opacity-60 transition-colors shrink-0">
-                        {creatingSchool
-                          ? <span className="material-symbols-outlined animate-spin" style={{ fontSize: 12 }}>progress_activity</span>
-                          : <span className="material-symbols-outlined" style={{ fontSize: 12 }}>add</span>}
+                        <span className="material-symbols-outlined" style={{ fontSize: 12 }}>add</span>
                         Add school
                       </button>
                     </div>
@@ -327,9 +325,7 @@ export default function RegisterPage() {
                       />
                       <button type="button" onClick={addFaculty} disabled={!newFacultyName.trim() || creatingFaculty}
                         className="flex items-center gap-1 px-3 py-2.5 bg-primary text-on-primary text-sm rounded-lg hover:bg-surface-tint disabled:opacity-50 transition-colors shrink-0">
-                        {creatingFaculty
-                          ? <span className="material-symbols-outlined animate-spin" style={{ fontSize: 16 }}>progress_activity</span>
-                          : <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span>}
+                        <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span>
                         Add
                       </button>
                     </div>
@@ -363,9 +359,7 @@ export default function RegisterPage() {
                     />
                     <button type="button" onClick={addDept} disabled={!newDeptName.trim() || creatingDept}
                       className="flex items-center gap-1 px-3 py-2.5 bg-primary text-on-primary text-sm rounded-lg hover:bg-surface-tint disabled:opacity-50 transition-colors shrink-0">
-                      {creatingDept
-                        ? <span className="material-symbols-outlined animate-spin" style={{ fontSize: 16 }}>progress_activity</span>
-                        : <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span>}
+                      <span className="material-symbols-outlined" style={{ fontSize: 16 }}>add</span>
                       Add
                     </button>
                   </div>
@@ -409,12 +403,7 @@ export default function RegisterPage() {
                 disabled={loading}
                 className="flex-1 bg-primary text-on-primary font-semibold py-3 rounded-lg shadow-sm hover:bg-surface-tint transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {loading ? (
-                  <>
-                    <span className="material-symbols-outlined animate-spin" style={{ fontSize: 16 }}>progress_activity</span>
-                    Creating…
-                  </>
-                ) : 'Create Account'}
+                {loading ? 'Creating…' : 'Create Account'}
               </button>
             </div>
           </>

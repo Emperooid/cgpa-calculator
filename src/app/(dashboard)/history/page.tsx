@@ -157,9 +157,7 @@ export default function HistoryPage() {
                 disabled={deleteMutation.isPending}
                 className="flex-1 bg-error text-on-error font-semibold py-2.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {deleteMutation.isPending ? (
-                  <span className="material-symbols-outlined animate-spin" style={{ fontSize: 16 }}>progress_activity</span>
-                ) : 'Delete'}
+                {deleteMutation.isPending ? 'Deleting…' : 'Delete'}
               </button>
             </div>
           </div>
