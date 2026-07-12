@@ -136,7 +136,7 @@ export default function PredictPage() {
             {result.message}
           </p>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="bg-surface-container-lowest rounded-xl p-4">
               <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wide mb-1">Current CGPA</p>
               <p className="text-2xl font-bold text-on-surface">{result.currentCgpa.toFixed(2)}</p>

@@ -64,7 +64,7 @@ export default function PlanPage() {
   return (
     <div>
       {/* Page header */}
-      <header className="mb-6 flex items-center justify-between">
+      <header className="mb-6 flex flex-wrap items-center justify-between gap-2">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-on-background">Study Plan</h2>
           <p className="text-xs text-on-surface-variant mt-1">Optimize your academic routine for maximum retention.</p>
@@ -100,7 +100,7 @@ export default function PlanPage() {
                   <h3 className="text-[16px] font-bold leading-6">{plan.targetGrade}</h3>
                 </div>
               </div>
-              <div className="relative z-10 flex gap-6 bg-surface-tint/40 backdrop-blur-md px-6 py-3 rounded-lg border border-on-primary/10">
+              <div className="relative z-10 flex gap-6 bg-surface-tint/40 backdrop-blur-md px-4 sm:px-6 py-3 rounded-lg border border-on-primary/10">
                 <div className="flex flex-col items-center">
                   <span className="text-2xl font-bold">{plan.plan?.studyHoursPerDay ?? '—'}h</span>
                   <span className="text-[11px] font-semibold text-primary-fixed opacity-90">Daily Avg</span>

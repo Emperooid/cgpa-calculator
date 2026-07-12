@@ -68,7 +68,7 @@ export default function DashboardPage() {
           <div className="skeleton h-7 w-48 rounded-lg" />
           <div className="skeleton h-4 w-64 rounded-lg" />
         </div>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-24 rounded-xl" />)}
         </div>
         <div className="skeleton h-64 rounded-xl" />
@@ -98,7 +98,7 @@ export default function DashboardPage() {
       {/* Empty state */}
       {noCgpa ? (
         <div className="space-y-5">
-          <div className="bg-primary-container/30 border border-on-primary-container/10 rounded-xl p-8 text-center">
+          <div className="bg-primary-container/30 border border-on-primary-container/10 rounded-xl p-6 sm:p-8 text-center">
             <div className="w-14 h-14 rounded-full bg-primary-container flex items-center justify-center mx-auto mb-4">
               <span className="material-symbols-outlined text-on-primary-container" style={{ fontSize: 28, fontVariationSettings: "'FILL' 1" }}>school</span>
             </div>
@@ -134,7 +134,7 @@ export default function DashboardPage() {
       ) : (
         <>
           {/* Stat cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard
               label="Current CGPA" value={analytics!.cgpa.toFixed(2)}
               sub={analytics!.currentClass} icon="workspace_premium" iconBg="bg-primary"

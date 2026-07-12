@@ -200,11 +200,11 @@ export default function CalculatorPage() {
 
       {/* Live GPA banner */}
       {liveResult && (
-        <div className="relative overflow-hidden bg-primary text-on-primary rounded-xl p-5 flex items-center justify-between">
+        <div className="relative overflow-hidden bg-primary text-on-primary rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
           <div className="absolute inset-0 bg-linear-to-r from-primary to-surface-tint opacity-80 pointer-events-none" />
           <div className="relative z-10">
             <p className="text-[11px] font-semibold text-primary-fixed uppercase tracking-wider mb-1">Live GPA Preview</p>
-            <p className="text-4xl font-bold leading-none">{liveResult.gpa.toFixed(2)}</p>
+            <p className="text-3xl sm:text-4xl font-bold leading-none">{liveResult.gpa.toFixed(2)}</p>
             <p className="text-primary-fixed text-xs mt-1">{liveResult.totalUnits} credit units</p>
           </div>
           <div className="relative z-10 text-right bg-surface-tint/40 backdrop-blur-md px-4 py-2.5 rounded-lg border border-on-primary/10">
@@ -223,7 +223,7 @@ export default function CalculatorPage() {
           className="hidden"
           onChange={e => { const f = e.target.files?.[0]; if (f) handleGradeFile(f); e.target.value = ''; }}
         />
-        <div className="px-6 py-4 border-b border-outline-variant flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-4 border-b border-outline-variant flex flex-wrap items-center justify-between gap-y-2">
           <h2 className="text-[16px] font-semibold text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-outline">list_alt</span>
             Courses
@@ -361,7 +361,7 @@ export default function CalculatorPage() {
             <span className="material-symbols-outlined text-secondary" style={{ fontSize: 20, fontVariationSettings: "'FILL' 1" }}>check_circle</span>
             <h3 className="font-semibold text-on-secondary-container">Grades Saved Successfully</h3>
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-surface-container-lowest rounded-lg p-3 text-center">
               <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-wide mb-1">Semester GPA</p>
               <p className="text-2xl font-bold text-primary">{result.gpa.toFixed(2)}</p>

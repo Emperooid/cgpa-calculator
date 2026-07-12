@@ -246,7 +246,7 @@ export default function ContributePage() {
         <div className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-5">
           <h2 className="font-semibold text-on-surface mb-4">Step 4 — Add Courses</h2>
 
-          <div className="grid grid-cols-2 gap-4 mb-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
             <div>
               <label className="block text-sm font-medium text-on-surface-variant mb-1">Level</label>
               <select value={level} onChange={e => setLevel(+e.target.value)} className={inputClass}>
@@ -342,18 +342,18 @@ export default function ContributePage() {
             <>
               <div className="space-y-2 mb-3">
                 {courses.map((c, i) => (
-                  <div key={i} className="flex gap-2 items-center">
+                  <div key={i} className="flex flex-wrap gap-2 items-center">
                     <input
                       value={c.code}
                       onChange={e => updateCourse(i, 'code', e.target.value.toUpperCase())}
                       placeholder="MTH101"
-                      className="w-24 px-2 py-1.5 rounded border border-outline-variant bg-surface text-on-surface text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="w-24 shrink-0 px-2 py-1.5 rounded border border-outline-variant bg-surface text-on-surface text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                     <input
                       value={c.title}
                       onChange={e => updateCourse(i, 'title', e.target.value)}
                       placeholder="Course title"
-                      className="flex-1 px-2 py-1.5 rounded border border-outline-variant bg-surface text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                      className="flex-1 min-w-30 px-2 py-1.5 rounded border border-outline-variant bg-surface text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                     <select
                       value={c.units}

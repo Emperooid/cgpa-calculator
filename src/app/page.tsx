@@ -353,7 +353,7 @@ export default function LandingPage() {
 
         {/* ── Bottom CTA ── */}
         <section className="max-w-[1280px] mx-auto px-5 py-16 reveal">
-          <div className="bg-surface-container-highest rounded-3xl p-10 text-center space-y-6 relative overflow-hidden">
+          <div className="bg-surface-container-highest rounded-3xl p-6 sm:p-10 text-center space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-56 h-56 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
             <h2 className="relative text-[20px] font-bold leading-tight tracking-tight text-on-surface max-w-xl mx-auto">
@@ -363,10 +363,10 @@ export default function LandingPage() {
               Create your free account today and start your journey with academic clarity.
             </p>
             <div className="relative flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link href="/register" className="bg-primary text-on-primary px-8 py-3 rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-primary/30 transition-all">
+              <Link href="/register" className="w-full sm:w-auto bg-primary text-on-primary px-8 py-3 rounded-xl text-sm font-semibold hover:shadow-lg hover:shadow-primary/30 transition-all text-center">
                 Create Free Account
               </Link>
-              <button className="bg-white border border-outline-variant px-8 py-3 rounded-xl text-sm font-semibold hover:bg-surface-container-low transition-all">
+              <button className="w-full sm:w-auto bg-white border border-outline-variant px-8 py-3 rounded-xl text-sm font-semibold hover:bg-surface-container-low transition-all">
                 Talk to Academic Advisor
               </button>
             </div>
@@ -391,7 +391,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-
     </div>
   );
 }

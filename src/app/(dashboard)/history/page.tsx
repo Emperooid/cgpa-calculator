@@ -69,7 +69,7 @@ export default function HistoryPage() {
           <div key={key} className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
             <button
               onClick={() => setOpen(isOpen ? null : key)}
-              className="w-full flex items-center justify-between px-5 py-4 hover:bg-surface-container transition-colors"
+              className="w-full flex items-center justify-between px-3 sm:px-5 py-4 hover:bg-surface-container transition-colors"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-lg bg-primary-container flex items-center justify-center">
