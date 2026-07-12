@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -84,6 +84,32 @@ export default function CalculatorPage() {
     setRows(prev => prev.map((r, idx) => idx === i ? { ...r, grade } : r));
 
   const [contributing, setContributing] = useState(false);
+  const gradeFileRef = useRef<HTMLInputElement>(null);
+
+  const handleGradeFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = (e.target?.result as string) ?? '';
+      const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
+      let matched = 0;
+      setRows(prev => {
+        const next = [...prev];
+        for (const line of lines) {
+          const sep = line.includes('\t') ? '\t' : ',';
+          const [rawCode, rawGrade] = line.split(sep).map(c => c.trim().replace(/^["']|["']$/g, ''));
+          if (!rawCode || !rawGrade) continue;
+          const code = rawCode.toUpperCase();
+          const grade = rawGrade.toUpperCase();
+          if (!['A','B','C','D','E','F'].includes(grade)) continue;
+          const idx = next.findIndex(r => r.code.toUpperCase() === code);
+          if (idx !== -1) { next[idx] = { ...next[idx], grade }; matched++; }
+        }
+        return next;
+      });
+      toast.success(matched ? `${matched} grade${matched !== 1 ? 's' : ''} applied from file` : 'No matching courses found');
+    };
+    reader.readAsText(file);
+  };
 
   const handleSubmit = async () => {
     if (!rows.length) return;
@@ -190,14 +216,33 @@ export default function CalculatorPage() {
 
       {/* Courses table */}
       <div className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+        <input
+          ref={gradeFileRef}
+          type="file"
+          accept=".csv,.txt,.tsv"
+          className="hidden"
+          onChange={e => { const f = e.target.files?.[0]; if (f) handleGradeFile(f); e.target.value = ''; }}
+        />
         <div className="px-6 py-4 border-b border-outline-variant flex items-center justify-between">
           <h2 className="text-[16px] font-semibold text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-outline">list_alt</span>
             Courses
           </h2>
-          <span className="text-xs font-semibold text-on-surface-variant bg-surface-container px-2.5 py-1 rounded-full">
-            {rows.length} course{rows.length !== 1 ? 's' : ''}
-          </span>
+          <div className="flex items-center gap-2">
+            {rows.length > 0 && (
+              <button
+                onClick={() => gradeFileRef.current?.click()}
+                title="Upload result sheet CSV (Code, Grade per row)"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-colors"
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: 14 }}>upload_file</span>
+                Upload Results
+              </button>
+            )}
+            <span className="text-xs font-semibold text-on-surface-variant bg-surface-container px-2.5 py-1 rounded-full">
+              {rows.length} course{rows.length !== 1 ? 's' : ''}
+            </span>
+          </div>
         </div>
 
         {loadingCourses ? (

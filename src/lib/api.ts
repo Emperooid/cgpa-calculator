@@ -28,10 +28,19 @@ api.interceptors.response.use(
         localStorage.setItem('cgpa_refresh', data.refreshToken);
         original.headers.Authorization = `Bearer ${data.accessToken}`;
         return api(original);
-      } catch {
-        localStorage.removeItem('cgpa_token');
-        localStorage.removeItem('cgpa_refresh');
-        window.location.href = '/login';
+      } catch (refreshErr: any) {
+        // Only wipe tokens on a real HTTP auth rejection (4xx from the server).
+        // Network errors (no response object) mean the backend is cold-starting;
+        // don't log the user out — let the original request fail gracefully.
+        if (refreshErr?.response) {
+          const isAnon = !!localStorage.getItem('cgpa_is_anon');
+          localStorage.removeItem('cgpa_token');
+          localStorage.removeItem('cgpa_refresh');
+          localStorage.removeItem('cgpa_is_anon');
+          // Anonymous users go back to landing so GuestAuth creates a fresh session.
+          // Registered users go to login.
+          window.location.href = isAnon ? '/' : '/login';
+        }
       }
     }
     return Promise.reject(err);

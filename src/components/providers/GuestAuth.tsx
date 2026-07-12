@@ -59,6 +59,7 @@ export default function GuestAuth({ children }: { children: React.ReactNode }) {
       .then(res => {
         localStorage.setItem('cgpa_token', res.accessToken);
         localStorage.setItem('cgpa_refresh', res.refreshToken);
+        localStorage.setItem('cgpa_is_anon', '1');
         setUser(res.user);
       })
       .catch(() => {})

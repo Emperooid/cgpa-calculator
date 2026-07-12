@@ -124,6 +124,7 @@ export default function SettingsPage() {
     mutationFn: () => authService.claimAccount({ email: claimEmail.trim(), password: claimPassword }),
     onSuccess: async (updatedUser) => {
       toast.success('Account claimed! Your data is now tied to your email.');
+      localStorage.removeItem('cgpa_is_anon');
       setUser(updatedUser);
       setClaimEmail(''); setClaimPassword(''); setClaimPassword2('');
     },
