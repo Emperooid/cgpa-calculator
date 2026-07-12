@@ -85,6 +85,35 @@ export default function CalculatorPage() {
 
   const [contributing, setContributing] = useState(false);
   const gradeFileRef = useRef<HTMLInputElement>(null);
+  const courseFileRef = useRef<HTMLInputElement>(null);
+
+  const handleCourseFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = (e.target?.result as string) ?? '';
+      const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
+      const parsed: GradeRow[] = [];
+      for (const line of lines) {
+        const sep = line.includes('\t') ? '\t' : ',';
+        const cols = line.split(sep).map(c => c.trim().replace(/^["']|["']$/g, ''));
+        if (cols.length < 2) continue;
+        const code = cols[0].toUpperCase();
+        const title = cols[1];
+        const units = parseInt(cols[2] ?? '3', 10);
+        if (!code || !title || /^(code|course.?code)$/i.test(code)) continue;
+        parsed.push({
+          courseId: `manual-${Date.now()}-${parsed.length}`,
+          code, title,
+          units: isNaN(units) || units < 1 || units > 6 ? 3 : units,
+          grade: 'A',
+        });
+      }
+      if (!parsed.length) { toast.error('No valid courses found. Use format: CODE, TITLE, UNITS'); return; }
+      setRows(parsed);
+      toast.success(`${parsed.length} course${parsed.length !== 1 ? 's' : ''} loaded`);
+    };
+    reader.readAsText(file);
+  };
 
   const handleGradeFile = (file: File) => {
     const reader = new FileReader();
@@ -223,12 +252,27 @@ export default function CalculatorPage() {
           className="hidden"
           onChange={e => { const f = e.target.files?.[0]; if (f) handleGradeFile(f); e.target.value = ''; }}
         />
+        <input
+          ref={courseFileRef}
+          type="file"
+          accept=".csv,.txt,.tsv"
+          className="hidden"
+          onChange={e => { const f = e.target.files?.[0]; if (f) handleCourseFile(f); e.target.value = ''; }}
+        />
         <div className="px-4 sm:px-6 py-4 border-b border-outline-variant flex flex-wrap items-center justify-between gap-y-2">
           <h2 className="text-[16px] font-semibold text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-outline">list_alt</span>
             Courses
           </h2>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => courseFileRef.current?.click()}
+              title="Upload course list CSV (Code, Title, Units per row)"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-colors"
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 14 }}>upload</span>
+              Upload Courses
+            </button>
             {rows.length > 0 && (
               <button
                 onClick={() => gradeFileRef.current?.click()}
