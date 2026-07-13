@@ -6,7 +6,7 @@ import QueryProvider from '@/components/providers/QueryProvider';
 import GuestAuth from '@/components/providers/GuestAuth';
 import './globals.css';
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? 'G-ELFGRPMRWR';
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 
