@@ -65,11 +65,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen bg-background">
-      <Sidebar mobileOpen={mobileNavOpen} onMobileClose={() => setMobileNavOpen(false)} />
+      <Sidebar isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
 
-      <div className="flex-1 md:ml-64 flex flex-col min-h-screen">
-        {/* Mobile top header */}
-        <header className="md:hidden flex items-center justify-between px-4 py-2.5 bg-surface-container-low border-b border-outline-variant sticky top-0 z-40">
+      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
+        {/* Top header — visible on small screens, hidden when sidebar is always visible */}
+        <header className="lg:hidden flex items-center justify-between px-4 py-2.5 bg-surface-container-low border-b border-outline-variant sticky top-0 z-40">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">
               G

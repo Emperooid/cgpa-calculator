@@ -79,10 +79,7 @@ export default function PlanPage() {
         </button>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-        {/* ── Left column ── */}
-        <div className="lg:col-span-8 flex flex-col gap-6">
+      <div className="flex flex-col gap-6">
 
           {/* Active Plan Banner */}
           {planLoading && (
@@ -225,10 +222,6 @@ export default function PlanPage() {
               </div>
             </div>
           )}
-        </div>
-
-        {/* ── Right column ── */}
-        <div className="lg:col-span-4 flex flex-col gap-6">
 
           {/* Cognitive Optimization tips */}
           <div className="bg-tertiary-fixed border border-on-tertiary-fixed-variant/10 shadow-sm rounded-xl p-6 relative overflow-hidden">
@@ -291,7 +284,6 @@ export default function PlanPage() {
               </p>
             )}
           </div>
-        </div>
 
       </div>
     </div>
