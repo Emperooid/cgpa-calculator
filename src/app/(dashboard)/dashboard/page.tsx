@@ -196,22 +196,32 @@ export default function DashboardPage() {
             <div className="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-6">
               <h3 className="text-[16px] font-semibold text-on-surface mb-5 flex items-center gap-2">
                 <span className="material-symbols-outlined text-outline">target</span>
-                Graduation Class Chances
+                Academic Health
               </h3>
               <div className="space-y-3.5">
-                {GRADE_CLASSES.map(gc => {
-                  const achieved = analytics!.cgpa >= gc.min;
-                  const pct = Math.min(100, (analytics!.cgpa / gc.min) * 100);
+                {(analytics!.chances.length > 0 ? analytics!.chances : GRADE_CLASSES.map(gc => ({
+                  class: gc.label, possible: analytics!.cgpa >= gc.min,
+                  probability: Math.round(Math.min(100, (analytics!.cgpa / gc.min) * 100)),
+                  requiredGPA: 0,
+                }))).map(c => {
+                  const achieved = analytics!.cgpa >= (GRADE_CLASSES.find(g => g.label === c.class)?.min ?? 0);
                   return (
-                    <div key={gc.label}>
-                      <div className="flex justify-between text-sm mb-1.5">
-                        <span className={achieved ? 'font-semibold text-on-surface' : 'text-on-surface-variant'}>{gc.label}</span>
-                        <span className="text-outline text-xs">{gc.min}+</span>
+                    <div key={c.class}>
+                      <div className="flex justify-between items-center mb-1.5">
+                        <span className={`text-sm ${achieved ? 'font-semibold text-on-surface' : 'text-on-surface-variant'}`}>{c.class}</span>
+                        <div className="flex items-center gap-2">
+                          {!achieved && c.requiredGPA > 0 && (
+                            <span className="text-[10px] text-outline">needs {c.requiredGPA.toFixed(1)} avg</span>
+                          )}
+                          <span className={`text-xs font-bold ${achieved ? 'text-secondary' : c.probability >= 60 ? 'text-primary' : c.probability >= 30 ? 'text-on-surface-variant' : 'text-error'}`}>
+                            {achieved ? '✓ Achieved' : `${c.probability}%`}
+                          </span>
+                        </div>
                       </div>
                       <div className="h-1.5 bg-surface-container-highest rounded-full">
                         <div
-                          className={`h-1.5 rounded-full transition-all ${achieved ? 'bg-secondary' : 'bg-primary-container'}`}
-                          style={{ width: `${pct}%` }}
+                          className={`h-1.5 rounded-full transition-all ${achieved ? 'bg-secondary' : c.probability >= 60 ? 'bg-primary' : c.probability >= 30 ? 'bg-primary-container' : 'bg-error-container'}`}
+                          style={{ width: `${c.probability}%` }}
                         />
                       </div>
                     </div>

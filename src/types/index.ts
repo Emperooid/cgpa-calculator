@@ -83,7 +83,16 @@ export interface Analytics {
   strongestCourse?: string;
   weakestCourse?: string;
   totalUnitsCompleted: number;
-  chances: { class: string; possible: boolean }[];
+  chances: { class: string; possible: boolean; probability: number; requiredGPA: number }[];
+}
+
+export interface Pathway {
+  name: string;
+  hint: string;
+  avgSemesterGPA: number;
+  projectedCgpa: number;
+  achievesTarget: boolean;
+  gradeUnits: { grade: string; units: number; pct: number }[];
 }
 
 export interface Prediction {
@@ -97,6 +106,7 @@ export interface Prediction {
   currentClass: string;
   targetClass: string;
   message: string;
+  pathways: Pathway[];
 }
 
 export interface StudyPlan {
